@@ -1,0 +1,24 @@
+jar {
+    archivesBaseName = 'utils'
+    version = '1.3.5'
+    def jars = configurations.runtimeClasspath.files.collect { "lib/$it.name" }
+//    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    manifest {
+        attributes 'Main-Class': 'ru.clevertec.Main',
+                'Class-Path': jars.join(' ')
+    }
+//    from configurations.compileClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+}
+
+tasks.register('copyAllDependecies', Copy) {
+    from configurations.runtimeClasspath.files
+    into("$buildDir/libs/lib")
+}
+
+jar.dependsOn copyAllDependecies
+
+tasks.register('copyFileJar', Copy) {
+    dependsOn jar
+    from 'build/libs/utils-1.3.5.jar'
+    into 'core/libs'
+}
