@@ -1,4 +1,5 @@
 rootProject.name = 'Gradle'
-include 'core'
-include 'api'
+include 'basic'
+include 'basic:core'
+include 'basic:api'
 
