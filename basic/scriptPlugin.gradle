@@ -21,7 +21,6 @@ tasks.register('copyFileJar', Copy) {
 }
 
 jar.finalizedBy copyFileJar
-copyFileJar.dependsOn jar
 
 project(':basic:core').tasks.matching { it.name == 'compileJava' }.configureEach {
     dependsOn copyFileJar
