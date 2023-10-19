@@ -1,0 +1,27 @@
+jar {
+    archivesBaseName = 'utils'
+    version = '1.3.5'
+    def jars = configurations.runtimeClasspath.files.collect { "lib/$it.name" }
+    manifest {
+        attributes 'Class-Path': jars.join(' ')
+    }
+}
+
+tasks.register('copyAllDependecies', Copy) {
+    from configurations.runtimeClasspath.files
+    into("$buildDir/libs/lib")
+}
+
+jar.dependsOn copyAllDependecies
+
+
+tasks.register('copyFileJar', Copy) {
+    from 'build/libs/utils-1.3.5.jar'
+    into 'core/libs'
+}
+
+jar.finalizedBy copyFileJar
+
+project(':basic:core').tasks.matching { it.name == 'compileJava' }.configureEach {
+    dependsOn copyFileJar
+}
